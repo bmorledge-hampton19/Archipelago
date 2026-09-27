@@ -407,4 +407,10 @@ silly_check_inclusion_rule: InclusionRule = lambda options: options.silly_checks
 skill_check_inclusion_rule: InclusionRule = lambda options: options.skill_checks
 
 
+friendship_stash_collection_rule = create_generic_final_goal_rule()
+
+def create_friendship_stash_inclusion_rule(item_number: int) -> InclusionRule:
+    return lambda options: options.power_of_friendship_stash >= item_number
+
+
 completion_rule = Has(EventName.VICTORY)

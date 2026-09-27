@@ -1,8 +1,11 @@
 from typing import Any
 
-from BaseClasses import Region
+from BaseClasses import Region, Location, Item, MultiWorld
 from worlds.AutoWorld import World
-from .names import BUDDY_POWER_LOCATION_NAMES, ItemName, LEVEL_UP_NAMES, BONUS_SCORE_NAMES
+from .names import (
+    BUDDY_POWER_LOCATION_NAMES,
+    ItemName, LEVEL_UP_NAMES, BONUS_SCORE_NAMES
+)
 from .regions import region_data_dict
 from .locations import BittyBuddiesLocation, location_data_dict
 from .events import event_data_dict
@@ -142,17 +145,59 @@ class BittyBuddiesWorld(World):
         self.set_completion_rule(completion_rule)
 
 
+    @classmethod
+    def stage_fill_hook(
+        cls, multiworld: MultiWorld,
+        progitempool: list[Item], usefulitempool: list[Item], filleritempool: list[Item],
+        fill_locations: list[Location]
+    ) -> None:
+        # Get the bitty buddies players that have a friendship stash, which can lead to restrictive seeds.
+        # Additionally, track the number of items in each player's stash so that we can move
+        # that many of their bonus point items to the front of the item pool for later placement.
+        bitty_buddies_players = multiworld.get_game_players(cls.game)
+        players_with_friendship_stash: set[int] = set()
+        remaining_bonus_point_items: dict[int,int] = dict()
+        for player in bitty_buddies_players:
+            player_options: BittyBuddiesOptions = multiworld.worlds[player].options
+            if player_options.power_of_friendship_stash > 0:
+                players_with_friendship_stash.add(player)
+                remaining_bonus_point_items[player] = player_options.power_of_friendship_stash.value
+
+        # For each player with items in a friendship stash, sort an equal number of bonus score items to the front
+        # of the item pool, so that they are placed later and are less likely to take the place of more meaningful
+        # progression items and cause a fill error.
+        def sort_bonus_points_to_front(item: Item):
+            if item.player in remaining_bonus_point_items and item.name in BONUS_SCORE_NAMES:
+                remaining_bonus_point_items[player] -= 1
+                if remaining_bonus_point_items[player] == 0: remaining_bonus_point_items.pop(player)
+                return -1
+            else:
+                return 0
+
+        # Move all the friendship stash locations to the end of the fill_locations array, so that they are filled
+        # last, when it is more likely that the Bitty Buddies worlds have already filled out a path to the goal.
+        def sort_friendship_stash_to_back(location: Item):
+            if location.player in players_with_friendship_stash and "Friendship Stash" in location.name:
+                return 1
+            else:
+                return 0
+
+        progitempool.sort(key=sort_bonus_points_to_front)
+        fill_locations.sort(key=sort_friendship_stash_to_back)
+
+
     def fill_slot_data(self) -> dict[str, Any]:
         return {
-            "cartridge_goal_scores" : self.options.cartridge_goal_scores.value,
-            "logic_difficulty" : self.options.logic_difficulty.value,
-            "final_goal_score" : self.options.final_goal_score.value,
-            "randomize_buddy_power" : self.options.randomize_buddy_power.value,
-            "silly_checks" : self.options.silly_checks.value,
-            "skill_checks" : self.options.skill_checks.value,
-            "death_link" : self.options.death_link.value,
-            "death_link_behavior" : self.options.death_link_behavior.value,
-            "death_link_receive_effect" : self.options.death_link_receive_effect.value,
-            "death_link_receive_chance" : self.options.death_link_receive_chance.value,
-            "death_link_group" : self.options.death_link_group.value
+            "cartridge_goal_scores": self.options.cartridge_goal_scores.value,
+            "logic_difficulty": self.options.logic_difficulty.value,
+            "final_goal_score": self.options.final_goal_score.value,
+            "randomize_buddy_power": self.options.randomize_buddy_power.value,
+            "silly_checks": self.options.silly_checks.value,
+            "skill_checks": self.options.skill_checks.value,
+            "power_of_friendship_stash": self.options.power_of_friendship_stash.value,
+            "death_link": self.options.death_link.value,
+            "death_link_behavior": self.options.death_link_behavior.value,
+            "death_link_receive_effect": self.options.death_link_receive_effect.value,
+            "death_link_receive_chance": self.options.death_link_receive_chance.value,
+            "death_link_group": self.options.death_link_group.value
         }

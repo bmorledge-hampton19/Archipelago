@@ -103,6 +103,24 @@ class SkillChecks(Toggle):
     display_name = "Skill Checks"
 
 
+class PowerOfFriendshipStash(NamedRange):
+    """
+    Adds additional location checks which are sent when the randomizer is completed (This gives the game
+    a more impactful release. Otherwise, Bitty Buddies tends to send all of its checks before completion.)
+
+    The maximum number of extra checks is 20, but keep in mind that the more checks are stashed, the
+    more junk items (bonus points) are added to the multiworld.
+    """
+
+    display_name = "Power of Friendship Stash"
+
+    range_start = 0
+    range_end = 20
+    default = 0
+
+    special_range_names = {"none": 0, "small": 5, "medium": 10, "large": 15, "max": 20}
+
+
 class BittyBuddiesDeathLink(DeathLink):
     """
     Enables Death Link.
@@ -172,6 +190,7 @@ class BittyBuddiesOptions(PerGameCommonOptions):
     randomize_buddy_power: RandomizeBuddyPower
     silly_checks: SillyChecks
     skill_checks: SkillChecks
+    power_of_friendship_stash: PowerOfFriendshipStash
     death_link: BittyBuddiesDeathLink
     death_link_behavior: DeathLinkBehavior
     death_link_receive_effect: DeathLinkReceiveEffect

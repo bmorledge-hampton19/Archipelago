@@ -3,12 +3,13 @@ from typing import NamedTuple
 from BaseClasses import Location
 from .names import (
     LocationName, RegionName, Buddy,
-    CARTRIDGE_GOAL_SCORE_NAMES, SILLY_CHECK_NAMES, SKILL_CHECK_NAMES
+    CARTRIDGE_GOAL_SCORE_NAMES, SILLY_CHECK_NAMES, SKILL_CHECK_NAMES, FRIENDSHIP_STASH_NAMES
 )
 from .rules import (
     GenericCollectionRule, InclusionRule,
     create_generic_goal_score_rule, create_generic_buddy_power_rule,
-    create_generic_buddy_level_rule, silly_check_inclusion_rule, skill_check_inclusion_rule
+    create_generic_buddy_level_rule, silly_check_inclusion_rule, skill_check_inclusion_rule,
+    friendship_stash_collection_rule, create_friendship_stash_inclusion_rule
 )
 
 
@@ -65,4 +66,12 @@ for buddy in Buddy:
         SKILL_CHECK_NAMES[buddy],
         collection_rule = create_generic_buddy_level_rule(buddy, required_level),
         inclusion_rule = skill_check_inclusion_rule
+    )
+
+# Initialize the power of friendship stash locations
+for i in range(1,21):
+    add_location_data(
+        FRIENDSHIP_STASH_NAMES[i-1],
+        collection_rule = friendship_stash_collection_rule,
+        inclusion_rule = create_friendship_stash_inclusion_rule(i)
     )

@@ -62,6 +62,27 @@ class LocationName(StrEnum):
     HIGH_FLYER = "Brie Skill Check (High Flyer)"
     SHARPSHOOTER = "Bazz Skill Check (Sharpshooter)"
 
+    FRIENDSHIP_STASH_1 = "Power of Friendship Stash 1"
+    FRIENDSHIP_STASH_2 = "Power of Friendship Stash 2"
+    FRIENDSHIP_STASH_3 = "Power of Friendship Stash 3"
+    FRIENDSHIP_STASH_4 = "Power of Friendship Stash 4"
+    FRIENDSHIP_STASH_5 = "Power of Friendship Stash 5"
+    FRIENDSHIP_STASH_6 = "Power of Friendship Stash 6"
+    FRIENDSHIP_STASH_7 = "Power of Friendship Stash 7"
+    FRIENDSHIP_STASH_8 = "Power of Friendship Stash 8"
+    FRIENDSHIP_STASH_9 = "Power of Friendship Stash 9"
+    FRIENDSHIP_STASH_10 = "Power of Friendship Stash 10"
+    FRIENDSHIP_STASH_11 = "Power of Friendship Stash 11"
+    FRIENDSHIP_STASH_12 = "Power of Friendship Stash 12"
+    FRIENDSHIP_STASH_13 = "Power of Friendship Stash 13"
+    FRIENDSHIP_STASH_14 = "Power of Friendship Stash 14"
+    FRIENDSHIP_STASH_15 = "Power of Friendship Stash 15"
+    FRIENDSHIP_STASH_16 = "Power of Friendship Stash 16"
+    FRIENDSHIP_STASH_17 = "Power of Friendship Stash 17"
+    FRIENDSHIP_STASH_18 = "Power of Friendship Stash 18"
+    FRIENDSHIP_STASH_19 = "Power of Friendship Stash 19"
+    FRIENDSHIP_STASH_20 = "Power of Friendship Stash 20"
+
 
 CARTRIDGE_GOAL_SCORE_NAMES: dict[Buddy, list[LocationName]] = {
     Buddy.BUD: [
@@ -99,6 +120,16 @@ SILLY_CHECK_NAMES: list[LocationName] = [
 SKILL_CHECK_NAMES: list[LocationName] = [
     LocationName.FAST_PHARMA, LocationName.PARRY_KING, LocationName.MIRACLE_CURE,
     LocationName.HIGH_FLYER, LocationName.SHARPSHOOTER,
+]
+
+FRIENDSHIP_STASH_NAMES: list[LocationName] = [
+    LocationName.FRIENDSHIP_STASH_1, LocationName.FRIENDSHIP_STASH_2, LocationName.FRIENDSHIP_STASH_3,
+    LocationName.FRIENDSHIP_STASH_4, LocationName.FRIENDSHIP_STASH_5, LocationName.FRIENDSHIP_STASH_6,
+    LocationName.FRIENDSHIP_STASH_7, LocationName.FRIENDSHIP_STASH_8, LocationName.FRIENDSHIP_STASH_9,
+    LocationName.FRIENDSHIP_STASH_10, LocationName.FRIENDSHIP_STASH_11, LocationName.FRIENDSHIP_STASH_12,
+    LocationName.FRIENDSHIP_STASH_13, LocationName.FRIENDSHIP_STASH_14, LocationName.FRIENDSHIP_STASH_15,
+    LocationName.FRIENDSHIP_STASH_16, LocationName.FRIENDSHIP_STASH_17, LocationName.FRIENDSHIP_STASH_18,
+    LocationName.FRIENDSHIP_STASH_19, LocationName.FRIENDSHIP_STASH_20,
 ]
 
 
