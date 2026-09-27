@@ -41,8 +41,8 @@ class TestFriendshipStashPartiallyEnabled(BittyBuddiesTestBase):
                 self.assertRaises(KeyError, self.world.get_location, location)
 
 
-class TestFriendshipStashEnabled(BittyBuddiesTestBase):
-    """Make sure the friendship stash locations are present and reachable when enabled."""
+class TestFullFriendshipStash(BittyBuddiesTestBase):
+    """Make sure all friendship stash locations are present and accessible when enabled."""
 
     # Normal difficulty with full friendship stash
     options = {
@@ -53,12 +53,12 @@ class TestFriendshipStashEnabled(BittyBuddiesTestBase):
         "power_of_friendship_stash": 20
     }
 
-    def test_friendship_stash_enabled(self) -> None:
+    def test_full_friendship_stash_enabled(self) -> None:
         for location in FRIENDSHIP_STASH_NAMES:
             try: self.world.get_location(location)
             except KeyError: self.fail()
 
-    def test_friendship_stash_accessibility(self) -> None:
+    def test_full_friendship_stash_accessibility(self) -> None:
 
         with self.subTest("Test friendship stash accessibility for initial items, which cannot goal."):
             for location in FRIENDSHIP_STASH_NAMES:

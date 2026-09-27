@@ -70,6 +70,8 @@ for buddy in Buddy:
 
 # Initialize the power of friendship stash locations
 for i in range(1,21):
+    # Note that world generation also adds an item rule forbidding local buddy level ups and
+    # buddy power increases at these locations.
     add_location_data(
         FRIENDSHIP_STASH_NAMES[i-1],
         collection_rule = friendship_stash_collection_rule,

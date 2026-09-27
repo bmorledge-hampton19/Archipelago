@@ -83,6 +83,13 @@ class LocationName(StrEnum):
     FRIENDSHIP_STASH_19 = "Power of Friendship Stash 19"
     FRIENDSHIP_STASH_20 = "Power of Friendship Stash 20"
 
+    def is_friendship_stash_name(self) -> bool:
+        """
+        Prefer this function over directly checking for inclusion in the FRIENDSHIP_STASH_NAMES list,
+        as it should be much faster than iterating over every friendship stash name.
+        """
+        return self.startswith("Power of Friendship Stash")
+
 
 CARTRIDGE_GOAL_SCORE_NAMES: dict[Buddy, list[LocationName]] = {
     Buddy.BUD: [
@@ -149,13 +156,18 @@ class ItemName(StrEnum):
     BAZZS_BIG_DAY_SCORE = "Bazz's Big Day Bonus Points"
 
 LEVEL_UP_NAMES: list[ItemName] = [
-    ItemName.BUD_LEVEL_UP, ItemName.BIFF_LEVEL_UP, ItemName.BENSON_LEVEL_UP, ItemName.BRIE_LEVEL_UP, ItemName.BAZZ_LEVEL_UP
+    ItemName.BUD_LEVEL_UP, ItemName.BIFF_LEVEL_UP, ItemName.BENSON_LEVEL_UP,
+    ItemName.BRIE_LEVEL_UP, ItemName.BAZZ_LEVEL_UP
 ]
 BONUS_SCORE_NAMES: list[ItemName] = [
     ItemName.TRASH_DASH_SCORE, ItemName.HAVE_AT_THEE_SCORE, ItemName.TREATMENT_TO_GO_SCORE,
     ItemName.ACROBIRD_SCORE, ItemName.BAZZS_BIG_DAY_SCORE
 ]
 
+FORBIDDEN_FRIENDSHIP_STASH_ITEM_NAMES: set[ItemName] = {
+    ItemName.BUD_LEVEL_UP, ItemName.BIFF_LEVEL_UP, ItemName.BENSON_LEVEL_UP,
+    ItemName.BRIE_LEVEL_UP, ItemName.BAZZ_LEVEL_UP, ItemName.BUDDY_POWER
+}
 
 class EventName(StrEnum):
     VICTORY = "Victory"
