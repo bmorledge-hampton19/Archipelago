@@ -9,7 +9,7 @@ from .rules import (
     GenericCollectionRule, InclusionRule,
     create_generic_goal_score_rule, create_generic_buddy_power_rule,
     create_generic_buddy_level_rule, silly_check_inclusion_rule, skill_check_inclusion_rule,
-    friendship_stash_collection_rule, create_friendship_stash_inclusion_rule
+    create_generic_all_buddies_maxed_rule, create_friendship_stash_inclusion_rule
 )
 
 
@@ -74,6 +74,6 @@ for i in range(1,21):
     # buddy power increases at these locations.
     add_location_data(
         FRIENDSHIP_STASH_NAMES[i-1],
-        collection_rule = friendship_stash_collection_rule,
+        collection_rule = create_generic_all_buddies_maxed_rule(),
         inclusion_rule = create_friendship_stash_inclusion_rule(i)
     )

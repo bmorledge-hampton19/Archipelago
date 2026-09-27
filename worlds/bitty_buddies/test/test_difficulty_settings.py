@@ -94,18 +94,6 @@ class TestHardDifficulty(BittyBuddiesTestBase):
             self.multiworld.state.collect(self.world.create_item(ItemName.BAZZ_LEVEL_UP), True)
             self.assertTrue(self.can_reach_location(LocationName.TRASH_DASH_1))
 
-        with self.subTest("Test the heightened final goal score using bonus score checks."):
-            # Given 1000 points of bonus score, the final goal score would be achievable in
-            # easy and normal, but not hard.
-            for _ in range(101):
-                self.multiworld.state.collect(self.world.create_item(ItemName.TRASH_DASH_SCORE), True)
-            self.assertFalse(self.can_reach_location(EventName.VICTORY))
-
-            # Another 1000 bonus points should do it though!
-            for _ in range(100):
-                self.multiworld.state.collect(self.world.create_item(ItemName.TRASH_DASH_SCORE), True)
-            self.assertTrue(self.can_reach_location(EventName.VICTORY))
-
 
 class TestHighGoalScoresEasyLogic(BittyBuddiesTestBase):
     """Tests the minimum score logic that makes high goal scores completable with easy logic"""

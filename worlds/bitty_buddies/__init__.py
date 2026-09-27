@@ -1,10 +1,10 @@
 from typing import Any
 
-from BaseClasses import Region
+from BaseClasses import Region, Location, Item, MultiWorld
 from worlds.AutoWorld import World
 from .names import (
     BUDDY_POWER_LOCATION_NAMES,
-    ItemName, LEVEL_UP_NAMES, BONUS_SCORE_NAMES, FORBIDDEN_FRIENDSHIP_STASH_ITEM_NAMES
+    ItemName, LEVEL_UP_NAMES, BONUS_SCORE_NAMES
 )
 from .regions import region_data_dict
 from .locations import BittyBuddiesLocation, location_data_dict
@@ -90,11 +90,6 @@ class BittyBuddiesWorld(World):
             region.locations.append(location)
             if location_data.collection_rule:
                 self.set_rule(location, location_data.collection_rule(self.player, self.options))
-            if name.is_friendship_stash_name():
-                location.item_rule = lambda item: (
-                    item.game != self.game or
-                    item.name not in FORBIDDEN_FRIENDSHIP_STASH_ITEM_NAMES
-                )
 
 
         # Create all the events, and set their collection rules.
@@ -148,6 +143,35 @@ class BittyBuddiesWorld(World):
     def set_rules(self) -> None:
         # Entrance and location rules were already set in create_regions. We just need to set the completion rule.
         self.set_completion_rule(completion_rule)
+
+    @classmethod
+    def stage_fill_hook(
+        cls, multiworld: MultiWorld,
+        progitempool: list[Item], usefulitempool: list[Item], filleritempool: list[Item],
+        fill_locations: list[Location]
+    ) -> None:
+        # Get the bitty buddies players that have a friendship stash, which can lead to restrictive seeds,
+        # and track the number of items in each player's stash so that we can move
+        # that many of their bonus point items to the front of the item pool for later placement.
+        bitty_buddies_players = multiworld.get_game_players(cls.game)
+        remaining_bonus_point_items: dict[int,int] = dict()
+        for player in bitty_buddies_players:
+            player_options: BittyBuddiesOptions = multiworld.worlds[player].options
+            if player_options.power_of_friendship_stash > 0:
+                remaining_bonus_point_items[player] = player_options.power_of_friendship_stash.value
+
+        # For each player with items in a friendship stash, sort an equal number of bonus score items to the front
+        # of the item pool, so that they are placed later and are less likely to take the place of more meaningful
+        # progression items and cause a fill error.
+        def sort_bonus_points_to_front(item: Item):
+            if item.player in remaining_bonus_point_items and item.name in BONUS_SCORE_NAMES:
+                remaining_bonus_point_items[item.player] -= 1
+                if remaining_bonus_point_items[item.player] == 0: remaining_bonus_point_items.pop(item.player)
+                return -1
+            else:
+                return 0
+
+        progitempool.sort(key=sort_bonus_points_to_front)
 
 
     def fill_slot_data(self) -> dict[str, Any]:

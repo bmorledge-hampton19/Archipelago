@@ -1,6 +1,6 @@
 from .bases import BittyBuddiesTestBase
 from ..options import CartridgeGoalScores, LogicDifficulty
-from ..names import ItemName, LocationName, FRIENDSHIP_STASH_NAMES
+from ..names import ItemName, LEVEL_UP_NAMES, FRIENDSHIP_STASH_NAMES
 
 class TestFriendshipStashDisabled(BittyBuddiesTestBase):
     """Make sure the friendship stash locations are excluded when the option is disabled."""
@@ -60,17 +60,51 @@ class TestFullFriendshipStash(BittyBuddiesTestBase):
 
     def test_full_friendship_stash_accessibility(self) -> None:
 
-        with self.subTest("Test friendship stash accessibility for initial items, which cannot goal."):
+        with self.subTest("Test friendship stash accessibility for initial items, which should be insufficient."):
             for location in FRIENDSHIP_STASH_NAMES:
                 self.assertFalse(self.can_reach_location(location))
 
-        with self.subTest("Give all buddy levels up and buddy power. The locations should now be accessible."):
-            for _ in range(5):
+        with self.subTest("Add in a bunch of bonus points, so that goal is reachable but the stash is not."):
+            for _ in range(201):
+                self.multiworld.state.collect(self.world.create_item(ItemName.ACROBIRD_SCORE), True)
+            for location in FRIENDSHIP_STASH_NAMES:
+                self.assertFalse(self.can_reach_location(location))
+
+
+        with self.subTest("Give the state 4 buddy power and all level 4 buddies, which is still insufficient."):
+            # Remove the random starting buddy.
+            for level_up_name in LEVEL_UP_NAMES: self.remove_by_name(level_up_name)
+
+            # Give 4 of each buddy level up and 3 buddy power (for a total of 4).
+            for _ in range(4):
                 self.multiworld.state.collect(self.world.create_item(ItemName.BUD_LEVEL_UP), True)
                 self.multiworld.state.collect(self.world.create_item(ItemName.BIFF_LEVEL_UP), True)
                 self.multiworld.state.collect(self.world.create_item(ItemName.BENSON_LEVEL_UP), True)
                 self.multiworld.state.collect(self.world.create_item(ItemName.BRIE_LEVEL_UP), True)
                 self.multiworld.state.collect(self.world.create_item(ItemName.BAZZ_LEVEL_UP), True)
+            for _ in range(3):
                 self.multiworld.state.collect(self.world.create_item(ItemName.BUDDY_POWER), True)
+
+            for location in FRIENDSHIP_STASH_NAMES:
+                self.assertFalse(self.can_reach_location(location))
+
+
+        with self.subTest("Slowly add in the last items until the full stash is accessible."):
+            self.multiworld.state.collect(self.world.create_item(ItemName.BUDDY_POWER), True)
+            for location in FRIENDSHIP_STASH_NAMES:
+                self.assertFalse(self.can_reach_location(location))
+            self.multiworld.state.collect(self.world.create_item(ItemName.BUD_LEVEL_UP), True)
+            for location in FRIENDSHIP_STASH_NAMES:
+                self.assertFalse(self.can_reach_location(location))
+            self.multiworld.state.collect(self.world.create_item(ItemName.BIFF_LEVEL_UP), True)
+            for location in FRIENDSHIP_STASH_NAMES:
+                self.assertFalse(self.can_reach_location(location))
+            self.multiworld.state.collect(self.world.create_item(ItemName.BENSON_LEVEL_UP), True)
+            for location in FRIENDSHIP_STASH_NAMES:
+                self.assertFalse(self.can_reach_location(location))
+            self.multiworld.state.collect(self.world.create_item(ItemName.BRIE_LEVEL_UP), True)
+            for location in FRIENDSHIP_STASH_NAMES:
+                self.assertFalse(self.can_reach_location(location))
+            self.multiworld.state.collect(self.world.create_item(ItemName.BAZZ_LEVEL_UP), True)
             for location in FRIENDSHIP_STASH_NAMES:
                 self.assertTrue(self.can_reach_location(location))

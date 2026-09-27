@@ -4,7 +4,7 @@ from worlds.AutoWorld import World
 from .names import EventName, RegionName
 from .locations import BittyBuddiesLocation
 from .items import BittyBuddiesItem
-from .rules import GenericCollectionRule, create_generic_final_goal_rule
+from .rules import GenericCollectionRule, create_generic_all_buddies_maxed_rule
 
 
 class EventData(NamedTuple):
@@ -17,7 +17,8 @@ class EventData(NamedTuple):
 event_data_dict: dict[EventName, EventData] = {
     EventName.VICTORY : EventData(
         RegionName.MENU,
-        rule = create_generic_final_goal_rule()
+        # This rule is preferred over calculating total score. See .rules/is_final_goal_achievable docstring.
+        rule = create_generic_all_buddies_maxed_rule()
     )
 }
 

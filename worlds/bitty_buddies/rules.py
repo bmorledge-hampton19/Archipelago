@@ -371,6 +371,15 @@ def are_all_buddies_maxed(state: CollectionState, player: int) -> bool:
         state.has(ItemName.BUDDY_POWER,player,5),
     ])
 
+def create_all_buddies_maxed_rule(player: int, _options: BittyBuddiesOptions) -> CollectionRule:
+    """Returns a collection rule derived from `are_all_buddies_maxed`."""
+    return partial(are_all_buddies_maxed, player = player)
+
+def create_generic_all_buddies_maxed_rule() -> GenericCollectionRule:
+    """Generalizes the all buddies maxed rule so it can be created without specific player data."""
+    return partial(create_all_buddies_maxed_rule)
+
+
 def get_total_score_in_logic(state: CollectionState, player: int, options: BittyBuddiesOptions) -> int:
     """Add up all the cartridge logic scores to get the total score in logic."""
     total_score_in_logic = 0
@@ -381,6 +390,14 @@ def get_total_score_in_logic(state: CollectionState, player: int, options: Bitty
 
 def is_final_goal_achievable(state: CollectionState, player: int, options: BittyBuddiesOptions) -> bool:
     """
+    DEPRECATED! This is the "technically correct" logic for go mode, because in addition to checking if all
+    buddies are maxed, it can return true if the total logic score achieves the final goal score.
+    However, this can cause problems when the friendship stash is enabled, since the fill algorithm thinks
+    it can goal without maxed buddies when it actually can't (due to the surplus of bonus score items).
+    Furthermore, it's preferable for the player to have logical access to maxed buddies before goaling, even
+    when it's not strictly necessary. On the client side, go mode is still determined using this more permissive
+    logic that takes into account total score.
+
     Determines if the final goal score is achievable based on the sum of each cartridge's maximum score in logic.
     Additionally, this rule returns True automatically if all buddies and buddy power are already level 5.
     """
@@ -391,11 +408,17 @@ def is_final_goal_achievable(state: CollectionState, player: int, options: Bitty
         else: return False
 
 def create_final_goal_rule(player: int, options: BittyBuddiesOptions) -> CollectionRule:
-    """Returns a collection rule derived from `is_final_goal_achievable`."""
+    """
+    DEPRECATED! See `is_final_goal_achievable` docstring.
+    Returns a collection rule derived from `is_final_goal_achievable`.
+    """
     return partial(is_final_goal_achievable, player = player, options = options)
 
 def create_generic_final_goal_rule() -> GenericCollectionRule:
-    """Generalizes the all buddies maxed rule so it can be created without specific player data."""
+    """
+    DEPRECATED! See `is_final_goal_achievable` docstring.
+    Generalizes the create final goal rule so it can be created without specific player data.
+    """
     return partial(create_final_goal_rule)
 
 
@@ -406,8 +429,6 @@ silly_check_inclusion_rule: InclusionRule = lambda options: options.silly_checks
 
 skill_check_inclusion_rule: InclusionRule = lambda options: options.skill_checks
 
-
-friendship_stash_collection_rule = create_generic_final_goal_rule()
 
 def create_friendship_stash_inclusion_rule(item_number: int) -> InclusionRule:
     return lambda options: options.power_of_friendship_stash >= item_number

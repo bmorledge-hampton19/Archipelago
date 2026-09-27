@@ -97,6 +97,25 @@ class TestBasicScoreLogic(BittyBuddiesTestBase):
             self.assertTrue(self.can_reach_location(LocationName.TRASH_DASH_2))
             self.assertTrue(self.can_reach_location(LocationName.BAZZS_BIG_DAY_2))
 
+        with self.subTest("Check accessibility for the victory condition"):
+            # The victory condition is inaccessible without all the buddies.
+            self.assertFalse(self.can_reach_location(EventName.VICTORY))
+
+            # Even with maxed buddies and 4 out of 5 of the buddy power, it's still inaccessible!
+            for _ in range(5):
+                self.multiworld.state.collect(self.world.create_item(ItemName.BUD_LEVEL_UP), True)
+                self.multiworld.state.collect(self.world.create_item(ItemName.BIFF_LEVEL_UP), True)
+                self.multiworld.state.collect(self.world.create_item(ItemName.BENSON_LEVEL_UP), True)
+                self.multiworld.state.collect(self.world.create_item(ItemName.BRIE_LEVEL_UP), True)
+                self.multiworld.state.collect(self.world.create_item(ItemName.BAZZ_LEVEL_UP), True)
+            for _ in range(3):
+                self.multiworld.state.collect(self.world.create_item(ItemName.BUDDY_POWER), True)
+            self.assertFalse(self.can_reach_location(EventName.VICTORY))
+
+            # Maxing out buddy power finally makes it accessible.
+            self.multiworld.state.collect(self.world.create_item(ItemName.BUDDY_POWER), True)
+            self.assertTrue(self.can_reach_location(EventName.VICTORY))
+
 
     def test_bonus_score(self) -> None:
 
@@ -133,9 +152,3 @@ class TestBasicScoreLogic(BittyBuddiesTestBase):
             # Adding in one more bonus score item should make the last Acrobird location accessible.
             self.multiworld.state.collect(self.world.create_item(ItemName.ACROBIRD_SCORE), True)
             self.assertTrue(self.can_reach_location(LocationName.ACROBIRD_5))
-
-        with self.subTest("Add in a frankly ridiculous amount of bonus score to make the final goal accessible."):
-            self.assertFalse(self.can_reach_location(EventName.VICTORY))
-            for _ in range(999):
-                self.multiworld.state.collect(self.world.create_item(ItemName.ACROBIRD_SCORE), True)
-            self.assertTrue(self.can_reach_location(EventName.VICTORY))

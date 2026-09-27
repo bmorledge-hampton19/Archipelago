@@ -164,10 +164,5 @@ BONUS_SCORE_NAMES: list[ItemName] = [
     ItemName.ACROBIRD_SCORE, ItemName.BAZZS_BIG_DAY_SCORE
 ]
 
-FORBIDDEN_FRIENDSHIP_STASH_ITEM_NAMES: set[ItemName] = {
-    ItemName.BUD_LEVEL_UP, ItemName.BIFF_LEVEL_UP, ItemName.BENSON_LEVEL_UP,
-    ItemName.BRIE_LEVEL_UP, ItemName.BAZZ_LEVEL_UP, ItemName.BUDDY_POWER
-}
-
 class EventName(StrEnum):
     VICTORY = "Victory"
