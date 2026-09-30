@@ -8,6 +8,12 @@ information about the process in the [Archipelago Setup Guide](https://archipela
 Once you've generated a Bitty Buddies settings file (.yaml) and have it hosted somewhere, you're ready for the next
 step!
 
+## Setting Up Bitty Buddies
+
+You can play Bitty Buddies for free on [itch.io](https://mr-dr-bean.itch.io/bitty-buddies).
+The game can be played in-browser (even on a mobile device), or you can download it for Windows, MacOS, or Linux.
+The Bitty Buddies Archipelago randomizer is part of the base game, so you don't need any mods to run it.
+
 ## Joining the Archipelago Multiworld
 
 From the Bitty Buddies main menu, select "Randomizer" to switch to the randomizer's main menu. From there,
