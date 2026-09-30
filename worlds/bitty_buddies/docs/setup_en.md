@@ -1,11 +1,5 @@
 # Bitty Buddies Randomizer Setup Guide
 
-## Required Software
-
-- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases/latest)
-- [Bitty Buddies](PLACEHOLDER)
-- [The Bitty Buddies apworld](PLACEHOLDER) (Scroll to the download links at the bottom of the page.)
-
 ## Archipelago Setup
 
 If this is your first time running an archipelago randomizer, you can find lots of helpful
@@ -14,7 +8,7 @@ information about the process in the [Archipelago Setup Guide](https://archipela
 Once you've generated a Bitty Buddies settings file (.yaml) and have it hosted somewhere, you're ready for the next
 step!
 
-### Joining the Archipelago Multiworld
+## Joining the Archipelago Multiworld
 
 From the Bitty Buddies main menu, select "Randomizer" to switch to the randomizer's main menu. From there,
 select "Archipelago" and enter the relevant information to connect. The archipelago saves independently

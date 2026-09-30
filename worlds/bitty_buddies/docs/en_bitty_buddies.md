@@ -27,11 +27,12 @@ The goal is to achieve the total high score specified in your YAML. The default 
 base game) but you can set it as high as 2000 points if you're looking for a challenge!
 
 ## Where's the setup guide?
+
 Right [here](/tutorial/Bitty%20Buddies/guide_en)!
 
 ## What are the "Silly Checks" that can be enabled in the options?
 
-The silly checks are 5 extra locations centered around interactions between buddies and their sub-optimal cartridges:
+The silly checks are 5 extra tasks for buddies in their sub-optimal cartridges:
 - Bud's silly check (Mean Mugging): Get your shoe stolen by an angry balloon in Bazz's Big Day.
 - Biff's silly check (Heavyweight Champion): Drop to the ground without slowing your fall in Acrobird.
 - Benson's silly check (Frictionless Fruit): Hit one of the banana peels with your tire in Trash Dash.
@@ -40,7 +41,7 @@ The silly checks are 5 extra locations centered around interactions between budd
 
 ## What are the "Skill Checks" that can be enabled in the options?
 
-The skill checks are 5 extra locations for buddies in their optimal cartridges:
+The skill checks are 5 extra tasks for buddies in their optimal cartridges:
 - Bud's skill check (Fast Pharma): Deliver orders to three different customers within 7 seconds in Treatment To-Go.
 - Biff's skill check (Parry King): Deflect 5 balloons with a single block action in Bazz's Big Day.
 - Benson's skill check (Miracle Cure): Go below 0 hp and survive by regenerating health in Have at Thee.
