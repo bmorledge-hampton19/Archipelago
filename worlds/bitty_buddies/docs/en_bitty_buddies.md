@@ -9,7 +9,7 @@ in their own game, but with some experimentation, you'll find that their true ta
 
 ## How do I create a config (yaml) file for this game?
 
-The [player options page for this game](../../player-options) contains all the options you need to
+The [player options page for this game](../player-options) contains all the options you need to
 create your config file.
 
 ## What does randomization do to this game?
