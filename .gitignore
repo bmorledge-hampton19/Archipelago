@@ -121,9 +121,6 @@ coverage.xml
 .pytest_cache/
 cover/
 
-# Fuzzer
-fuzz.py
-fuzz_output/
 
 # Flask stuff:
 instance/
