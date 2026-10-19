@@ -102,7 +102,7 @@ class BittyBuddiesWorld(World):
             region = self.get_region(event_data.region_name)
 
             region.add_event(
-                name, name, location_type=BittyBuddiesLocation, item_type=BittyBuddiesItem
+                name.value, location_type=BittyBuddiesLocation, item_type=BittyBuddiesItem
             )
 
             if event_data.rule:
