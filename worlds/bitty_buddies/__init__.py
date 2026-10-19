@@ -36,9 +36,12 @@ class BittyBuddiesWorld(World):
     early_buddies: list[ItemName]
 
 
-    def create_item(self, name: ItemName) -> BittyBuddiesItem:
+    def create_item(self, name: ItemName | str) -> BittyBuddiesItem:
         item_data = item_data_dict[name]
-        return BittyBuddiesItem(name, item_data.classification, item_data.id, self.player)
+        return BittyBuddiesItem(
+            name.value if isinstance(name, ItemName) else name,
+            item_data.classification, item_data.id, self.player
+        )
 
     def get_filler_item_name(self) -> str:
         return self.random.choice(BONUS_SCORE_NAMES)
@@ -67,7 +70,7 @@ class BittyBuddiesWorld(World):
         # Initialize all the regions.
         regions: list[Region] = []
         for region_name in region_data_dict:
-            regions.append(Region(region_name, self.player, self.multiworld, region_data_dict[region_name].hint))
+            regions.append(Region(region_name.value, self.player, self.multiworld, region_data_dict[region_name].hint))
 
         # Establish connections between regions, including entrance rules.
         for region in regions:
@@ -86,7 +89,7 @@ class BittyBuddiesWorld(World):
             if location_data.inclusion_rule and not location_data.inclusion_rule(self.options): continue
 
             region = self.get_region(location_data.region_name)
-            location = BittyBuddiesLocation(self.player, name, location_data.id, region)
+            location = BittyBuddiesLocation(self.player, name.value, location_data.id, region)
             region.locations.append(location)
             if location_data.collection_rule:
                 self.set_rule(location, location_data.collection_rule(self.player, self.options))

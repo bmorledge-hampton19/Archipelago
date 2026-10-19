@@ -16,5 +16,5 @@ class RegionData(NamedTuple):
 
 # Create a dictionary of RegionData with names as the keys.
 region_data_dict: dict[RegionName, RegionData] = {
-    RegionName.MENU.value : RegionData()
+    RegionName.MENU : RegionData()
 }
