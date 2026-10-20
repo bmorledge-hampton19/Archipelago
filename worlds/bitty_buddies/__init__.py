@@ -178,17 +178,17 @@ class BittyBuddiesWorld(World):
 
 
     def fill_slot_data(self) -> dict[str, Any]:
-        return {
-            "cartridge_goal_scores": self.options.cartridge_goal_scores.value,
-            "logic_difficulty": self.options.logic_difficulty.value,
-            "final_goal_score": self.options.final_goal_score.value,
-            "randomize_buddy_power": self.options.randomize_buddy_power.value,
-            "silly_checks": self.options.silly_checks.value,
-            "skill_checks": self.options.skill_checks.value,
-            "power_of_friendship_stash": self.options.power_of_friendship_stash.value,
-            "death_link": self.options.death_link.value,
-            "death_link_behavior": self.options.death_link_behavior.value,
-            "death_link_receive_effect": self.options.death_link_receive_effect.value,
-            "death_link_receive_chance": self.options.death_link_receive_chance.value,
-            "death_link_group": self.options.death_link_group.value
-        }
+        return self.options.as_dict(
+            "cartridge_goal_scores",
+            "logic_difficulty",
+            "final_goal_score",
+            "randomize_buddy_power",
+            "silly_checks",
+            "skill_checks",
+            "power_of_friendship_stash",
+            "death_link",
+            "death_link_behavior",
+            "death_link_receive_effect",
+            "death_link_receive_chance",
+            "death_link_group"
+        )
