@@ -139,16 +139,29 @@ class TestBasicScoreLogic(BittyBuddiesTestBase):
             self.multiworld.state.collect(self.world.create_item(ItemName.ACROBIRD_SCORE), True)
             self.assertTrue(self.can_reach_location(LocationName.ACROBIRD_1))
 
-        with self.subTest("Add in a BUNCH of bonus score so that Acrobird is fully completable"):
+        with self.subTest("Add in additional bonus score without additional buddy power"):
             # We need 97 bonus points to hit the 100-point goal.
-            # 9 more bonus score checks gives us 10 in total, which should give:
-            # 10 (5*2) points from the first two bonuses + 80 (10*8) points from the other 8 = 90 points.
-            # So, we should be just short of the last check.
-            for _ in range(9):
+            # 10 more bonus score checks gives us 11 in total, which should give:
+            # 10 (5*2) points from the first two bonuses + 90 (10*9) points from the other 9 = 100 points.
+            for _ in range(10):
                 self.multiworld.state.collect(self.world.create_item(ItemName.ACROBIRD_SCORE), True)
+
+            # Now, *in theory* we have enough bonus points for all the Acrobird goal scores.
+            # However, in practice nothing above the second goal score is in logic until we have more buddy power.
+            # (This is the "soft logic" that helps prevent the fill algorithm from placing buddy power too late
+            # due to an excess of bonus score items still waiting to be placed.)
+            self.assertTrue(self.can_reach_location(LocationName.ACROBIRD_2))
+            self.assertFalse(self.can_reach_location(LocationName.ACROBIRD_3))
+            self.assertFalse(self.can_reach_location(LocationName.ACROBIRD_4))
+            self.assertFalse(self.can_reach_location(LocationName.ACROBIRD_5))
+
+        with self.subTest("Add in buddy power to until all Acrobird locations are accessible."):
+            # Adding in one more buddy power makes the 3rd and 4th goal scores available (but not the 5th).
+            self.multiworld.state.collect(self.world.create_item(ItemName.BUDDY_POWER), True)
+            self.assertTrue(self.can_reach_location(LocationName.ACROBIRD_3))
             self.assertTrue(self.can_reach_location(LocationName.ACROBIRD_4))
             self.assertFalse(self.can_reach_location(LocationName.ACROBIRD_5))
 
-            # Adding in one more bonus score item should make the last Acrobird location accessible.
-            self.multiworld.state.collect(self.world.create_item(ItemName.ACROBIRD_SCORE), True)
+            # And adding in another buddy power (for 3 total) makes all the Acrobird goal scores accessible!
+            self.multiworld.state.collect(self.world.create_item(ItemName.BUDDY_POWER), True)
             self.assertTrue(self.can_reach_location(LocationName.ACROBIRD_5))

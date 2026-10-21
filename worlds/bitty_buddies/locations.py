@@ -7,7 +7,7 @@ from .names import (
 )
 from .rules import (
     GenericCollectionRule, InclusionRule,
-    create_generic_goal_score_rule, create_generic_buddy_power_rule,
+    create_generic_goal_score_rule, create_generic_all_cartridge_goal_scores_rule,
     create_generic_buddy_level_rule, silly_check_inclusion_rule, skill_check_inclusion_rule,
     create_generic_all_buddies_maxed_rule, create_friendship_stash_inclusion_rule
 )
@@ -46,7 +46,7 @@ for i, name in enumerate([
     LocationName.ALL_BUDDIES_LEVEL_1, LocationName.ALL_BUDDIES_LEVEL_2, LocationName.ALL_BUDDIES_LEVEL_3,
     LocationName.ALL_BUDDIES_LEVEL_4
 ]):
-    add_location_data(name, collection_rule = create_generic_buddy_power_rule(i+1))
+    add_location_data(name, collection_rule = create_generic_all_cartridge_goal_scores_rule(i+1))
 
 # Initialize the silly check locations
 for buddy in Buddy:

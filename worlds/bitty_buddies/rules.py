@@ -316,11 +316,19 @@ def is_goal_score_in_logic(
     state: CollectionState, player: int, options: BittyBuddiesOptions, cartridge: Buddy, which_level: int
 ) -> bool:
     """
-    Determine if a given level up is in logic by comparing the maximum score in logic
-    for that cartridge to the level up score.
+    Determine if a given goal score is in logic by comparing it to the maximum score in logic.
+    Additionally, enforce minimum buddy power thresholds for goal scores above level 2.
+    (This helps prevent the fill algorithm from choking, and results in behavior similar to the local randomizer,
+    which guarantees that a buddy power up will be placed on one of the level 2 cartridge goal scores.)
     """
     maximum_score_in_logic = get_cartridge_logic_score(state, player, options, cartridge)
-    return maximum_score_in_logic >= CARTRIDGE_GOAL_SCORES[options.cartridge_goal_scores.value][which_level]
+    buddy_power_requirement = 1
+    if which_level > 2: buddy_power_requirement += 1
+    if which_level > 4: buddy_power_requirement += 1
+    return (
+        maximum_score_in_logic >= CARTRIDGE_GOAL_SCORES[options.cartridge_goal_scores.value][which_level] and
+        state.count(ItemName.BUDDY_POWER, player) >= buddy_power_requirement
+    )
 
 def create_goal_score_rule(
     player: int, options: BittyBuddiesOptions, cartridge: Buddy, which_level: int
@@ -339,25 +347,28 @@ def create_generic_goal_score_rule(cartridge: Buddy, which_level: int) -> Generi
     )
 
 
-def is_buddy_power_check_in_logic(
+def are_all_cartridge_goal_scores_in_logic(
     state: CollectionState, player: int, options: BittyBuddiesOptions, which_level: int
 ) -> bool:
-    """Determine if the buddy power check for the given level is in logic by
+    """Determine if the all cartridges goal score check for the given level is in logic by
     checking each cartridge to see if the level is in logic."""
     for cartridge in Buddy:
         if not is_goal_score_in_logic(state, player, options, cartridge, which_level):
             return False
     return True
 
-def create_buddy_power_rule(
+def create_all_cartridge_goal_scores_rule(
     player: int, options: BittyBuddiesOptions, which_level: int
 ) -> CollectionRule:
-    """Returns a collection rule derived from `is_buddy_power_check_in_logic`."""
-    return partial( is_buddy_power_check_in_logic, player = player, options = options, which_level = which_level)
+    """Returns a collection rule derived from `are_all_cartridge_goal_scores_in_logic`."""
+    return partial(
+        are_all_cartridge_goal_scores_in_logic,
+        player = player, options = options, which_level = which_level
+    )
 
-def create_generic_buddy_power_rule(which_level: int) -> GenericCollectionRule:
-    """Generalizes the buddy power rule so it can be created without specific player data."""
-    return partial(create_buddy_power_rule, which_level = which_level)
+def create_generic_all_cartridge_goal_scores_rule(which_level: int) -> GenericCollectionRule:
+    """Generalizes the all cartridge goal scores rule so it can be created without specific player data."""
+    return partial(create_all_cartridge_goal_scores_rule, which_level = which_level)
 
 
 def are_all_buddies_maxed(state: CollectionState, player: int) -> bool:
@@ -424,6 +435,10 @@ def create_generic_final_goal_rule() -> GenericCollectionRule:
 
 def create_generic_buddy_level_rule(buddy: Buddy, level: int = 1) -> GenericCollectionRule:
     return lambda _player, _options: Has(LEVEL_UP_NAMES[buddy], level)
+
+def create_generic_buddy_power_rule(level: int) -> GenericCollectionRule:
+    return lambda _player, _options: Has(ItemName.BUDDY_POWER, level)
+
 
 silly_check_inclusion_rule: InclusionRule = lambda options: options.silly_checks
 
